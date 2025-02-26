@@ -1,1 +1,26 @@
+version: '3.8'
 
+services:
+  backend:
+    image: dhruv1345/vc-app-backend:latest
+    ports:
+      - "8000:8000"
+    restart: always
+    networks:
+      - vc-network
+
+  frontend:
+    image: dhruv1345/vc-app-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_WS=ws://backend:8000/ws  # ✅ Fix: Use "backend" (not "vc-app-backend")
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - vc-network
+
+networks:
+  vc-network:
+    driver: bridge
